@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AliCalc.Model
+﻿namespace AliCalc.Model
 {
     public class Drug
     {
@@ -10,8 +6,9 @@ namespace AliCalc.Model
         public readonly double GramsPerMole;
         public readonly Mass Mass;
         public double Moles => Mass.g / GramsPerMole;
+        public string Solvent;
 
-        public Drug(string name, Mass mass, double gramsPerMol) =>
-            (Name, Mass, GramsPerMole) = (name, mass, gramsPerMol);
+        public Drug(string name, Mass mass, double gramsPerMol, string solvent) =>
+            (Name, Mass, GramsPerMole, Solvent) = (name, mass, gramsPerMol, solvent);
     }
 }

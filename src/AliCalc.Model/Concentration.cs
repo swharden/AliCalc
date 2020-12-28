@@ -28,6 +28,7 @@ namespace AliCalc.Model
     public class Concentration
     {
         public readonly double M;
+        public double MolesPerLiter => M;
         public double mM => M * 1e3;
         public double uM => M * 1e6;
         public double nM => M * 1e9;
@@ -37,6 +38,7 @@ namespace AliCalc.Model
 
         public static Concentration operator *(Concentration c, double value) => new Concentration(c.M * value);
         public static Concentration operator /(Concentration c, double value) => new Concentration(c.M * value);
+        public static double operator /(Concentration a, Concentration b) => a.M / b.M;
 
         public static Concentration MilliMol(double mM) => new Concentration(mM / 1e3);
         public static Concentration MicroMol(double uM) => new Concentration(uM / 1e6);
