@@ -30,5 +30,15 @@ namespace AliCalc.Model
             double dilutionsToSyringe = stockM / (SyringeDilutionFactor * bathM);
             AliquotVolume_L = SyringeVolume_L / dilutionsToSyringe;
         }
+
+        public AliquotPlan(Drug drug, string solvent, StockConcentration stock, BathConcentration bath)
+        {
+            TotalStockVolume_L = drug.Moles / stock.M;
+
+            Concentration syringe = bath * SyringeDilutionFactor;
+            double dilutionsToSyringe = stock.M / syringe.M;
+
+            AliquotVolume_L = SyringeVolume_L / dilutionsToSyringe;
+        }
     }
 }
