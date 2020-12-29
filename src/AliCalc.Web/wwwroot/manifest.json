@@ -1,0 +1,15 @@
+{
+  "name": "Aliquot Calculator for Electrophysiology",
+  "short_name": "AliCalc",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#003366",
+  "theme_color": "#003366",
+  "icons": [
+    {
+      "src": "icon-120.png",
+      "type": "image/png",
+      "sizes": "120x120"
+    }
+  ]
+}

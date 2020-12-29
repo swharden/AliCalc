@@ -1,0 +1,33 @@
+﻿<style>
+    section.aliquotInputs div {
+        display: inline-block;
+        margin: .5em;
+        padding: .5em;
+    }
+
+    section.aliquotInputs .valid {
+        background-color: #EEE;
+    }
+
+    section.aliquotInputs .invalid {
+        background-color: #ffbbbb;
+    }
+
+    section.aliquotInputs .description {
+        font-style: italic;
+        font-size: 80%;
+    }
+</style>
+
+<section class="aliquotInputs">
+    <EditName />
+    <EditNumber Name="Molecular Weight (g/mol)" Text="602.59" />
+    <EditNumber Name="Mass (mg)" Text="1000" />
+    <EditCombo Name="Solvent" OptionsCSV="water,DMSO" />
+    <EditNumber Name="Stock Concentration (mM)" Text="100" Description="Near maximum solubility" />
+    <EditNumber Name="Bath Concentration (µM)" Text="100" Description="Effective concentration in ACSF" />
+</section>
+
+@code {
+
+}
