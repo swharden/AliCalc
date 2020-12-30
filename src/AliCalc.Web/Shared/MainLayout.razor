@@ -1,16 +1,41 @@
 ﻿@inherits LayoutComponentBase
 
-<style>
-    body {
-        background-color: #EEEEEE;
-        margin: 0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-</style>
+<div class="container p-0 mx-auto shadow">
 
-<div style="margin: auto; max-width: 900px; background-color: white; box-shadow: 0 3px 5px 0 rgba(0, 0, 0, .05);">
-    <Banner />
-    <div style="padding: 1em;">
+    <header class="p-3" style="background-color: #003366; color: white;">
+        <h1 class="m-0"> AliCalc </h1>
+        <div><em> Aliquot Calculator for Electrophysiology </em></div>
+    </header>
+
+    <article class="p-3 bg-white">
+
         @Body
-    </div>
+
+    </article>
+
+    <footer class="p-3 bg-light text-muted">
+        <small>
+            AliCalc version @VersionString | Built on @BuildDateString | Client-side Blazor running .NET CLR @DotNetVersionString |
+            <a class="" href="https://github.com/swharden/AliCalc-Blazor">view source</a>
+        </small>
+    </footer>
+
 </div>
+
+@using System.Reflection
+
+@code{
+
+    private string VersionString
+    {
+        get
+        {
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            return $"{version.Major}.{version.Minor}.{version.Build}";
+        }
+    }
+
+    private string BuildDateString => DateTime.Parse(Properties.Resources.BuildDate).ToString("MMMM dd, yyyy");
+
+    private string DotNetVersionString => Environment.Version.ToString();
+}

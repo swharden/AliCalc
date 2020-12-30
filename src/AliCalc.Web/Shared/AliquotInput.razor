@@ -1,33 +1,66 @@
-﻿<style>
-    section.aliquotInputs div {
-        display: inline-block;
-        margin: .5em;
-        padding: .5em;
-    }
+﻿<div class="container">
+    <div class="row">
 
-    section.aliquotInputs .valid {
-        background-color: #EEE;
-    }
+        <div class="col-sm-3 p-3 rounded @(EDS.DrugNameIsValid ? "" : "alert-danger")">
+            <label>
+                <strong>Drug Name</strong>
+                <input type="text" class="form-control" @bind="EDS.DrugName" @bind:event="oninput" />
+            </label>
+        </div>
 
-    section.aliquotInputs .invalid {
-        background-color: #ffbbbb;
-    }
+        <div class="col-sm-3 p-3 rounded @(EDS.MolecularWeightIsValid ? "" : "alert-danger")">
+            <label>
+                <strong>Molecular Weight (g/mol)</strong>
+                <input type="text" class="form-control" @bind="EDS.MolecularWeight" @bind:event="oninput" />
+                <small class="text-muted">Use value on the container</small>
+            </label>
+        </div>
 
-    section.aliquotInputs .description {
-        font-style: italic;
-        font-size: 80%;
-    }
-</style>
+        <div class="col-sm-3 p-3 rounded @(EDS.MassIsValid ? "" : "alert-danger")">
+            <label>
+                <strong>Mass (mg)</strong>
+                <input type="text" class="form-control" @bind="EDS.Mass" @bind:event="oninput" />
+                <small class="text-muted">Try to use the whole container</small>
+            </label>
+        </div>
 
-<section class="aliquotInputs">
-    <EditName />
-    <EditNumber Name="Molecular Weight (g/mol)" Text="602.59" />
-    <EditNumber Name="Mass (mg)" Text="1000" />
-    <EditCombo Name="Solvent" OptionsCSV="water,DMSO" />
-    <EditNumber Name="Stock Concentration (mM)" Text="100" Description="Near maximum solubility" />
-    <EditNumber Name="Bath Concentration (µM)" Text="100" Description="Effective concentration in ACSF" />
-</section>
+        <div class="col-sm-3 p-3 rounded @(EDS.SolventIsValid ? "" : "alert-danger")">
+            <label>
+                <strong>Solvent</strong>
+                <select class="form-control" @bind="EDS.Solvent" @bind:event="oninput">
+                    @foreach (var solvent in EDS.Solvents)
+                    {
+                        <option value="@solvent">@solvent</option>
+                    }
+                </select>
+            </label>
+        </div>
+
+        <div class="col-sm-3 p-3 rounded @(EDS.StockConcentrationIsValid ? "" : "alert-danger")">
+            <label>
+                <strong>Stock (mM)</strong>
+                <input type="text" class="form-control" @bind="EDS.StockConcentration" @bind:event="oninput" />
+                <small class="text-muted">Approximate solubility limit</small>
+            </label>
+        </div>
+
+        <div class="col-sm-3 p-3 rounded @(EDS.BathConcentrationIsValid ? "" : "alert-danger")">
+            <label class="align-items-center">
+                <strong>Bath (µM)</strong>
+                <input type="text" class="form-control" @bind="EDS.BathConcentration" @bind:event="oninput" />
+                <small class="text-muted">Effective concentration in ACSF</small>
+            </label>
+        </div>
+
+    </div>
+</div>
 
 @code {
+    [Inject]
+    private Services.ExperimentDesignService EDS { get; set; }
 
+    protected override void OnInitialized()
+    {
+        EDS.LoadDefaults();
+    }
 }
