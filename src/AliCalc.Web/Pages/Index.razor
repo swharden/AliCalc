@@ -1,4 +1,31 @@
 ﻿@page "/"
 
+<AliquotInput />
 
-        <AliquotInput />
+@if (!EDS.AllValid)
+{
+    <div class="alert-danger p-3 round m-3 rounded">
+        <strong>ERROR:</strong> Invalid input
+    </div>
+}
+else
+{
+    <h2>Instructions</h2>
+    <ul>
+        <li class="m-2"><strong>Stock:</strong> @EDS.InstructionsStock</li>
+        <li class="m-2"><strong>Aliquot:</strong> @EDS.InstructionsAliquot</li>
+        <li class="m-2"><strong>Syringe:</strong> @EDS.InstructionsSyringe</li>
+        <li class="m-2"><strong>Bath:</strong> @EDS.InstructionsBath</li>
+    </ul>
+}
+
+@code{
+    [Inject]
+    private Services.ExperimentDesignService EDS { get; set; }
+
+    protected override void OnInitialized()
+    {
+        EDS.LoadDefaults();
+        EDS.OnStateChange += StateHasChanged;
+    }
+}
