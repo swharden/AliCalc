@@ -2,7 +2,7 @@
 
 [![Build Status](https://dev.azure.com/swharden/swharden/_apis/build/status/swharden.AliCalc-Blazor?branchName=main)](https://dev.azure.com/swharden/swharden/_build/latest?definitionId=14&branchName=main)
 
-**AliCalc is an aliquot calculator for electrophysiology experiments.** This repository implements AliCalc as a progressive web application (PWA) using Blazor (C# and WebAssembly).
+**AliCalc is an aliquot calculator for electrophysiology experiments.** This repository implements AliCalc as a static website using Client-side Blazor (C# and WebAssembly).
 
 * [**AliCalc-Blazor Website**](https://swharden.com/software/alicalc2)
 
