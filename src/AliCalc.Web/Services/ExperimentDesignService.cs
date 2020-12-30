@@ -100,15 +100,16 @@ namespace AliCalc.Web.Services
             return canParse && isPositive;
         }
 
+        public int AliquotIconCount { get; private set; }
         public string InstructionsStock { get; private set; }
         public string InstructionsAliquot { get; private set; }
         public string InstructionsSyringe { get; private set; }
         public string InstructionsBath { get; private set; }
-        private void RecalculateStrings()
+        private void Recalculate()
         {
             if (AllValid)
             {
-                var drug = new Drug(DrugName, Mass.FromGrams(double.Parse(DrugMass)), double.Parse(MolecularWeight), "DMSO");
+                var drug = new Drug(DrugName, Mass.FromMilligrams(double.Parse(DrugMass)), double.Parse(MolecularWeight), "DMSO");
                 var stock = new StockConcentration(Concentration.MilliMol(double.Parse(StockConcentration)));
                 var bath = new BathConcentration(Concentration.MicroMol(double.Parse(BathConcentration)));
                 var plan = new AliquotPlan(drug, stock, bath);
@@ -117,6 +118,7 @@ namespace AliCalc.Web.Services
                 InstructionsAliquot = plan.InstructionToAliquotStock;
                 InstructionsSyringe = plan.InstructionSyringe;
                 InstructionsBath = plan.InstructionBath;
+                AliquotIconCount = Math.Min(1000, (int)plan.AliquotCount);
             }
             else
             {
@@ -124,13 +126,15 @@ namespace AliCalc.Web.Services
                 InstructionsAliquot = "invalid input";
                 InstructionsSyringe = "invalid input";
                 InstructionsBath = "invalid input";
+                AliquotIconCount = 0;
             }
         }
 
         public ExperimentDesignService()
         {
             LoadDefaults();
-            OnStateChange += RecalculateStrings;
+            OnStateChange += Recalculate;
+            Recalculate();
         }
 
         public void LoadDefaults()

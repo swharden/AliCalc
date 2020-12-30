@@ -17,6 +17,12 @@ else
         <li class="m-2"><strong>Syringe:</strong> @EDS.InstructionsSyringe</li>
         <li class="m-2"><strong>Bath:</strong> @EDS.InstructionsBath</li>
     </ul>
+    <div class="container">
+        @foreach (var i in Enumerable.Range(0, EDS.AliquotIconCount))
+        {
+            <img class="ml-1 mt-2" src="aliquot.png" />
+        }
+    </div>
 }
 
 @code{
