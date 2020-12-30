@@ -109,7 +109,7 @@ namespace AliCalc.Web.Services
         {
             if (AllValid)
             {
-                var drug = new Drug(DrugName, Mass.FromMilligrams(double.Parse(DrugMass)), double.Parse(MolecularWeight), "DMSO");
+                var drug = new Drug(DrugName, Mass.FromMilligrams(double.Parse(DrugMass)), double.Parse(MolecularWeight), Solvent);
                 var stock = new StockConcentration(Concentration.MilliMol(double.Parse(StockConcentration)));
                 var bath = new BathConcentration(Concentration.MicroMol(double.Parse(BathConcentration)));
                 var plan = new AliquotPlan(drug, stock, bath);
