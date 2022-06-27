@@ -1,0 +1,109 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<div class="container">
+	<div class="row g-4 my-3 justify-content-start">
+
+		<div class="col-sm-4">
+			<label class="form-label fw-bold">Drug Name</label>
+			<input type="text" class="form-control" @bind=Name @bind:event="oninput">
+			<div id="emailHelp" class="form-text"></div>
+		</div>
+
+		<div class="col-sm-4">
+			<label class="form-label fw-bold">Molecular Weight</label>
+			<div class="input-group">
+				<input type="text" class="form-control" @bind=MW @bind:event="oninput">
+				<span class="input-group-text" id="basic-addon2">g/mol</span>
+			</div>
+			<div class="form-text">Use value on the container</div>
+		</div>
+
+		<div class="col-sm-4">
+			<label class="form-label fw-bold">Mass</label>
+			<div class="input-group">
+				<input type="text" class="form-control" @bind=Mass_mg @bind:event="oninput">
+				<span class="input-group-text" id="basic-addon2">mg</span>
+			</div>
+			<div class="form-text">Try to use the full container</div>
+		</div>
+
+		<div class="col-sm-4">
+			<label class="form-label fw-bold">Solvent</label>
+			<select class="form-select" @bind=Solvent>
+				<option value="water" selected>Water</option>
+				<option value="DMSO">DMSO</option>
+				<option value="ethanol">Ethanol</option>
+			</select>
+		</div>
+
+		<div class="col-sm-4">
+			<label class="form-label fw-bold">Stock</label>
+			<div class="input-group">
+				<input type="text" class="form-control" @bind=ConcStock_mM @bind:event="oninput">
+				<span class="input-group-text" id="basic-addon2">mM</span>
+			</div>
+			<div class="form-text">Target the solubility limit</div>
+		</div>
+
+		<div class="col-sm-4">
+			<label class="form-label fw-bold">Bath</label>
+			<div class="input-group">
+				<input type="text" class="form-control" @bind=ConcBath_uM @bind:event="oninput">
+				<span class="input-group-text" id="basic-addon2">µM</span>
+			</div>
+			<div class="form-text">Final concentration in ACSF</div>
+		</div>
+
+	</div>
+
+	<h3 class="mt-4">Create</h3>
+	<ul class="lh-lg">
+		<li>
+			<strong>Dissolve</strong>
+			@Mass_mg mg @Name into @StockTotalVolume_mL mL @Solvent
+			to make @ConcStock_mM mM
+		</li>
+		<li>
+			<strong>Aliquot</strong>
+			to @AliquotVolume_uL µL each (makes @AliquotCount aliquots)
+		</li>
+		<li>
+			<strong>Label</strong>
+			@ConcStock_mM mM @Name in @Solvent (@AliquotVolume_uL µL ea.)
+		</li>
+	</ul>
+
+	<h3 class="mt-4">Deliver</h3>
+	<ul class="lh-lg">
+		<li>
+			<strong>Syringe:</strong>
+			Bring one aliquot to 10 mL ACSF in a 50x syringe for @ConcBath_uM µM bath
+		</li>
+		<li>
+			<strong>Bath:</strong>
+			Add one aliquot to 500 mL ACSF for @ConcBath_uM µM
+		</li>
+		<li>
+			<strong>Solvent:</strong>
+			Final bath will contain @ConcBathSolvent_percent % @Solvent
+		</li>
+	</ul>
+
+</div>
+
+@code {
+	string Name { get; set; } = "picrotoxin";
+	string Solvent = "water";
+	double MW = 602.59;
+	double Mass_mg = 1000;
+	double ConcStock_mM = 100;
+	double ConcBath_uM = 100;
+	double ConcSyringe50x_mM => ConcBath_uM / 1000 * 50;
+
+	double StockTotalVolume_mL => Math.Round(Mass_mg / (ConcStock_mM * MW) * 1e3, 3);
+	double AliquotVolume_uL => Math.Round(ConcSyringe50x_mM / ConcStock_mM * 1e3 * 10, 1);
+	double AliquotCount => Math.Round(StockTotalVolume_mL * 1000 / AliquotVolume_uL, 1);
+	double ConcBathSolvent_percent => AliquotVolume_uL / (500 * 1000) * 100;
+}
