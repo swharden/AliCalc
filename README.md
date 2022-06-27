@@ -1,13 +1,9 @@
-# AliCalc-Blazor
+# AliCalc
 
-[![Build Status](https://dev.azure.com/swharden/swharden/_apis/build/status/swharden.AliCalc-Blazor?branchName=main)](https://dev.azure.com/swharden/swharden/_build/latest?definitionId=14&branchName=main)
+AliCalc is an aliquot calculator for electrophysiologists.
 
-**AliCalc is an aliquot calculator for electrophysiology experiments.** This repository implements AliCalc as a static website using Client-side Blazor (C# and WebAssembly).
+### Implementation
 
-* [**AliCalc-Blazor Website**](https://swharden.com/software/alicalc2)
+* [AliCalc](https://github.com/swharden/AliCalc) is a client-side Blazor WebAssembly app
 
-[![](dev/screenshot.jpg)](https://swharden.com/software/alicalc2)
-
-**AliCalc-JS** is a similar project created with React (JavaScript).
- * [**AliCalc-JS Website**](https://swharden.com/software/alicalc)
- * [**AliCalc-JS Repository**](https://github.com/swharden/AliCalc)
+* [AliCalcJS](https://github.com/swharden/AliCalc-JS) is a similar project implemented using React
