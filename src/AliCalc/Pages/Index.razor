@@ -65,6 +65,16 @@
 			<div class="form-text">Final concentration in ACSF</div>
 		</div>
 
+		<div class="col-sm-4">
+			<label class="form-label fw-bold">Syringe</label>
+			<select class="form-select" @bind=Syringe_mL>
+				<option value="10" selected>10 mL</option>
+				<option value="3">3 mL</option>
+				<option value="2">2 mL</option>
+				<option value="1">1 mL</option>
+			</select>
+		</div>
+
 	</div>
 
 	<h3 class="mt-4">Create</h3>
@@ -95,20 +105,23 @@
 	<ul class="lh-lg">
 		<li>
 			<strong>Size:</strong>
-			One aliquot supplies approximately 4 hours of drug
+			One @AliquotVolume_uL µL aliquot supplies @Hours hours of drug
 		</li>
 		<li>
 			<strong>Syringe:</strong>
-			Bring one aliquot to 10 mL ACSF in a 50x syringe for @ConcBath_uM µM bath
+			Bring one @AliquotVolume_uL µL aliquot to @Syringe_mL mL ACSF to make a @ConcSyringe50x_mM mM (50x) syringe for @ConcBath_uM µM bath
 		</li>
 		<li>
 			<strong>Bath:</strong>
-			Add one aliquot to 500 mL ACSF for @ConcBath_uM µM
+			Add one @AliquotVolume_uL µL aliquot to @AliquotBath_mL mL ACSF for @ConcBath_uM µM bath
 		</li>
-		<li>
-			<strong>Solvent:</strong>
-			Final bath will contain @ConcBathSolvent_percent % @Solvent
-		</li>
+		@if (@Solvent != "water")
+		{
+			<li>
+				<strong>Solvent:</strong>
+				Final bath will contain @ConcBathSolvent_percent% @Solvent
+			</li>
+		}
 	</ul>
 
 
@@ -141,9 +154,12 @@
 	double ConcStock_mM = 100;
 	double ConcBath_uM = 100;
 	double ConcSyringe50x_mM => ConcBath_uM / 1000 * 50;
+	double Syringe_mL = 10;
+	double Hours => Math.Round(50 * Syringe_mL / 2 / 60, 1);
+	double AliquotBath_mL => Syringe_mL * 50;
 
 	double StockTotalVolume_mL => Math.Round(Mass_mg / (ConcStock_mM * MW) * 1e3, 3);
-	double AliquotVolume_uL => Math.Round(ConcSyringe50x_mM / ConcStock_mM * 1e3 * 10, 1);
+	double AliquotVolume_uL => Math.Round(ConcSyringe50x_mM / ConcStock_mM * 1e3 * Syringe_mL, 1);
 	double AliquotCount => Math.Round(StockTotalVolume_mL * 1000 / AliquotVolume_uL, 1);
 	double ConcBathSolvent_percent => AliquotVolume_uL / (500 * 1000) * 100;
 }
