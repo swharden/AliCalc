@@ -161,5 +161,5 @@
 	double StockTotalVolume_mL => Math.Round(Mass_mg / (ConcStock_mM * MW) * 1e3, 3);
 	double AliquotVolume_uL => Math.Round(ConcSyringe50x_mM / ConcStock_mM * 1e3 * Syringe_mL, 1);
 	double AliquotCount => Math.Round(StockTotalVolume_mL * 1000 / AliquotVolume_uL, 1);
-	double ConcBathSolvent_percent => AliquotVolume_uL / (500 * 1000) * 100;
+	double ConcBathSolvent_percent => Math.Round(AliquotVolume_uL / (500 * 1000) * 100, 5);
 }
