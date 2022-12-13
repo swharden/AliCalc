@@ -1,4 +1,4 @@
-name: CICD
+name: Publish
 
 on:
   workflow_dispatch:
@@ -8,13 +8,22 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
       - name: 🛒 Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: ✨ Setup .NET 6
         uses: actions/setup-dotnet@v1
         with:
@@ -23,10 +32,12 @@ jobs:
         run: dotnet restore src
       - name: 🌠 Publish
         run: dotnet publish src --configuration Release -o ./public
-      - name: 🔑 Install SSH Key
-        run: |
-          install -m 600 -D /dev/null ~/.ssh/id_rsa
-          echo "${{ secrets.PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
-          echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-      - name: 🚀 Deploy
-        run: rsync --archive --stats -e 'ssh -p 18765' 'public/wwwroot/' ${{ secrets.REMOTE_DEST }}
+      - name: 🛠️ Configure Pages
+        uses: actions/configure-pages@v2
+      - name: 📦 Upload Artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: "./public/wwwroot"
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
