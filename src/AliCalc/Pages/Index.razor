@@ -94,16 +94,6 @@
         </li>
     </ul>
 
-    <div>
-        @if (!double.IsNaN(AliquotCount) && (int)AliquotCount > 0)
-        {
-            @foreach (int i in Enumerable.Range(0, Math.Min(1000, (int)AliquotCount)))
-            {
-                <div class="aliquot-image d-inline-block" />
-            }
-        }
-    </div>
-
     <h3 class="mt-4">Deliver</h3>
     <ul class="lh-lg">
         <li>
@@ -127,6 +117,16 @@
         }
     </ul>
 
+    <h3 class="mt-4">Stock</h3>
+    <div class="m-3">
+        @if (!double.IsNaN(AliquotCount) && (int)AliquotCount > 0)
+        {
+            @foreach (int i in Enumerable.Range(0, Math.Min(1000, (int)AliquotCount)))
+            {
+                <div class="aliquot-image d-inline-block" />
+            }
+        }
+    </div>
 
     <footer class="my-3">
         <a href="https://github.com/swharden/alicalc" class="text-dark">
