@@ -1,5 +1,5 @@
 # AliCalc
 
-AliCalc is an aliquot calculator for electrophysiologists
+AliCalc is an aliquot calculator for electrophysiology
 
-https://swharden.github.io/AliCalc
+https://swharden.com/AliCalc/
