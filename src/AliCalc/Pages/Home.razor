@@ -1,0 +1,145 @@
+﻿@page "/"
+
+<PageTitle>AliCalc</PageTitle>
+
+<div class="row g-4 my-3 justify-content-start">
+
+    <div class="col-sm-4">
+        <label class="form-label fw-bold">Drug Name</label>
+        <input type="text" class="form-control" @bind=Name @bind:event="oninput">
+        <div id="emailHelp" class="form-text"></div>
+    </div>
+
+    <div class="col-sm-4">
+        <label class="form-label fw-bold">Molecular Weight</label>
+        <div class="input-group">
+            <input type="text" class="form-control" @bind=INPUT_MW @bind:event="oninput">
+            <span class="input-group-text" id="basic-addon2">g/mol</span>
+        </div>
+        <div class="form-text">Use value on the container</div>
+    </div>
+
+    <div class="col-sm-4">
+        <label class="form-label fw-bold">Mass</label>
+        <div class="input-group">
+            <input type="text" class="form-control" @bind=INPUT_Mass_mg @bind:event="oninput">
+            <span class="input-group-text" id="basic-addon2">mg</span>
+        </div>
+        <div class="form-text">Try to use the full container</div>
+    </div>
+
+    <div class="col-sm-4">
+        <label class="form-label fw-bold">Solvent</label>
+        <select class="form-select" @bind=Solvent>
+            <option value="water" selected>Water</option>
+            <option value="DMSO">DMSO</option>
+            <option value="ethanol">Ethanol</option>
+        </select>
+    </div>
+
+    <div class="col-sm-4">
+        <label class="form-label fw-bold">Stock</label>
+        <div class="input-group">
+            <input type="text" class="form-control" @bind=INPUT_ConcStock_mM @bind:event="oninput">
+            <span class="input-group-text" id="basic-addon2">mM</span>
+        </div>
+        <div class="form-text">Target the solubility limit</div>
+    </div>
+
+    <div class="col-sm-4">
+        <label class="form-label fw-bold">Bath</label>
+        <div class="input-group">
+            <input type="text" class="form-control" @bind=INPUT_ConcBath_uM @bind:event="oninput">
+            <span class="input-group-text" id="basic-addon2">µM</span>
+        </div>
+        <div class="form-text">Final concentration in ACSF</div>
+    </div>
+
+    <div class="col-sm-4">
+        <label class="form-label fw-bold">Syringe</label>
+        <select class="form-select" @bind=Syringe_mL>
+            <option value="10" selected>10 mL</option>
+            <option value="3">3 mL</option>
+            <option value="2">2 mL</option>
+            <option value="1">1 mL</option>
+        </select>
+    </div>
+
+</div>
+
+<h3 class="mt-4" style="page-break-before: always;">Create</h3>
+<ul class="lh-lg">
+    <li>
+        <strong>Dissolve</strong>
+        @Mass_mg mg @Name into @StockTotalVolume_mL mL @Solvent
+        to make @ConcStock_mM mM
+    </li>
+    <li>
+        <strong>Aliquot</strong>
+        to @AliquotVolume_uL µL each (makes @AliquotCount aliquots)
+    </li>
+    <li>
+        <strong>Label</strong>
+        @ConcStock_mM mM @Name in @Solvent (@AliquotVolume_uL µL each)
+    </li>
+</ul>
+
+<h3 class="mt-4">Deliver</h3>
+<ul class="lh-lg">
+    <li>
+        <strong>Size:</strong>
+        One @AliquotVolume_uL µL aliquot supplies @Hours hours of drug
+    </li>
+    <li>
+        <strong>Syringe:</strong>
+        Bring one @AliquotVolume_uL µL aliquot to @Syringe_mL mL ACSF to make a @ConcSyringe50x_mM mM (50x) syringe for @ConcBath_uM µM bath
+    </li>
+    <li>
+        <strong>Bath:</strong>
+        Add one @AliquotVolume_uL µL aliquot to @AliquotBath_mL mL ACSF for @ConcBath_uM µM bath
+    </li>
+    @if (@Solvent != "water")
+    {
+        <li>
+            <strong>Solvent:</strong>
+            Final bath will contain @ConcBathSolvent_percent% @Solvent
+        </li>
+    }
+</ul>
+
+<h3 class="mt-4">Stock</h3>
+<div class="m-3">
+    @if (!double.IsNaN(AliquotCount) && (int)AliquotCount > 0)
+    {
+        @foreach (int i in Enumerable.Range(0, Math.Min(1000, (int)AliquotCount)))
+        {
+            <img src="aliquot.png" />
+        }
+    }
+</div>
+
+@code {
+    string Name { get; set; } = "picrotoxin";
+    string Solvent { get; set; } = "water";
+
+    string INPUT_MW { get; set; } = "602.59";
+    double MW => double.TryParse(INPUT_MW, out double result) ? result : double.NaN;
+
+    string INPUT_Mass_mg { get; set; } = "1000";
+    double Mass_mg => double.TryParse(INPUT_Mass_mg, out double result) ? result : double.NaN;
+
+    string INPUT_ConcStock_mM { get; set; } = "100";
+    double ConcStock_mM => double.TryParse(INPUT_ConcStock_mM, out double result) ? result : double.NaN;
+
+    string INPUT_ConcBath_uM { get; set; } = "100";
+    double ConcBath_uM => double.TryParse(INPUT_ConcBath_uM, out double result) ? result : double.NaN;
+
+    double ConcSyringe50x_mM => ConcBath_uM / 1000 * 50;
+    double Syringe_mL = 10;
+    double Hours => Math.Round(50 * Syringe_mL / 2 / 60, 1);
+    double AliquotBath_mL => Syringe_mL * 50;
+    double StockTotalVolume_mL => ConcStock_mM > 0 ? Math.Round(Mass_mg / (ConcStock_mM * MW) * 1e3, 3) : 0;
+    double AliquotVolume_uL => ConcStock_mM > 0 ? Math.Round(ConcSyringe50x_mM / ConcStock_mM * 1e3 * Syringe_mL, 1) : 0;
+    double AliquotCount => Math.Round(StockTotalVolume_mL * 1000 / AliquotVolume_uL, 1);
+    double ConcBathSolvent_percent => AliquotBath_mL > 0 ? Math.Round(AliquotVolume_uL / (AliquotBath_mL * 1000) * 100, 5) : 0;
+}

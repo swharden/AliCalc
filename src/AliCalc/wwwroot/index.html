@@ -3,14 +3,16 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AliCalc</title>
     <meta name='description' content='Aliquat calculator for electrophysiology' />
-    <link href="css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/blazor.css" rel="stylesheet" />
-    <link href="AliCalc.styles.css" rel="stylesheet" />
-    <link rel="shortcut icon" href="favicon.ico" />
     <link rel="canonical" href="https://swharden.com/AliCalc/" />
+
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link href="AliCalc.styles.css" rel="stylesheet" />
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GN1D8JT7TK"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -18,13 +20,26 @@
         gtag('js', new Date());
         gtag('config', 'G-GN1D8JT7TK');
     </script>
+
+    <style>
+        a {
+            text-decoration: none;
+        }
+
+            a:hover {
+                text-decoration: underline;
+            }
+    </style>
+
 </head>
 
 <body>
     <div id="app">
-        <div class="m-5 fs-2">
-            Loading AliCalc...
-        </div>
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
     </div>
 
     <div id="blazor-error-ui">
